@@ -21,7 +21,7 @@
     shell: /tmp/script.sh
 
   - name: Installing GitLab (Latest Version) #if in settings.cfg gitlab_version = latest - make this task
-    apt:
+    package:
       name: gitlab-ce
       state: latest
     when: gitlab_version == "latest"
