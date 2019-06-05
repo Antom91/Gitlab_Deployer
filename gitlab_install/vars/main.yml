@@ -1,0 +1,3 @@
+---
+# vars file for gitlab_install
+gitlab_version: latest

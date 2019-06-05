@@ -1,0 +1,37 @@
+---
+# tasks file for gitlab_install
+
+  - name: Update APT GET #Updating Packages
+    apt:
+     update_cache: yes
+
+  - name: Installing CA-CERTIFICATES
+    apt: name=ca-certificates
+
+  - name: Installing POSTFIX #Install Postfix mail transfer agent
+    apt: name=postfix
+
+  - name: Download bash file to install GitLab repositories
+    get_url:
+     url: https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh
+     dest: /tmp/script.sh
+     mode: 0775
+
+  - name: Run SCRIPT TO ADD REPOSITORIES
+    shell: /tmp/script.sh
+
+  - name: Installing GitLab (Latest Version) #if in settings.cfg gitlab_version = latest - make this task
+    apt:
+      name: gitlab-ce
+      state: latest
+    when: gitlab_version == "latest"
+
+  - name: Installing GitLab ({{ gitlab_version }} Version) #if in gitlab_version = other version - make this task
+    shell: apt-get install gitlab-ce={{ gitlab_version }}
+    when:  gitlab_version != "latest"
+
+  - name: Run Reconfigure
+    shell: gitlab-ctl reconfigure
+
+  - name: Restarting GitLab
+    shell: gitlab-ctl restart

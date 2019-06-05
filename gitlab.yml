@@ -1,0 +1,7 @@
+---
+- name: Installing GitLab On Remote Server On Debian-like OS
+  hosts: all
+  become: yes
+  
+  roles:
+   - { role: gitlab_install }
